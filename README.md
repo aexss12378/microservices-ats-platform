@@ -47,12 +47,6 @@
 - **Business Logic**: 處理招聘流程各階段的狀態管理
 - **Integration**: 與其他服務協調流程進度
 
-#### **[recruitment-service/](recruitment-service/)** - 招聘管理服務
-統籌整個招聘活動，包含：
-- **Configuration**: 資料庫連線配置 (PostgreSQL: `recruitment_db`)
-- **Orchestration**: 協調各服務間的招聘流程
-- **Dashboard**: 提供招聘活動總覽功能
-
 #### **[tracked-applicant-service/](tracked-applicant-service/)** - 求職者追蹤服務
 記錄求職者在招聘流程中的狀態變化，包含：
 - **Controller**: [`TrackedApplicantController`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/TrackedApplicantController.java) - 提供 `/api/trackedApplicants` REST API
