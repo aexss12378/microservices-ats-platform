@@ -288,9 +288,9 @@ cd applicant-service
 - ✅ [`ProcessStepRepository`](process-service/src/main/java/org/ats/processservice/repository/ProcessStepRepository.java) 資料存取層
 
 **待完成項目**：
-- ☐ 個別求職者流程狀態追蹤實體 (`ApplicantProcessState`)
-- ☐ 流程自動化觸發機制
-- ☐ 流程統計和報表功能
+ ☐ 個別求職者流程狀態追蹤實體 (`ApplicantProcessState`)
+ ☐ 流程自動化觸發機制
+ ☐ 流程統計和報表功能
 
 ### 📋 待開發功能 (To-Do List)
 
