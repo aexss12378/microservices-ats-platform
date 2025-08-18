@@ -100,16 +100,118 @@
 - **雲端資料庫**: 使用 Cloud SQL Proxy 連接 Google Cloud SQL
 - **自動化 CI/CD**: 透過 [`build-and-push.sh`](build-and-push.sh) 實現自動化部署
 
+// ...existing code...
+
 ## API 端點總覽
 
-| 服務 | 端點 | 功能描述 |
-|------|------|----------|
-| applicant-service | `/api/applicants` | 求職者 CRUD 操作 |
-| job-service | `/api/jobs` | 職位 CRUD 操作 |
-| interview-service | `/api/interviewSessions` | 面試場次管理 |
-| interview-service | `/api/feedbacks` | 面試回饋管理 |
-| tracked-applicant-service | `/api/trackedApplicants` | 求職者追蹤記錄 |
+### Applicant Service - 求職者管理
+**Base URL**: `/api/applicants`
 
+| HTTP Method | Endpoint | 功能描述 | Controller Method |
+|------------|----------|----------|-------------------|
+| GET | `/api/applicants` | 取得所有求職者列表 | [`getAllApplicants()`](applicant-service/src/main/java/org/ats/applicantservice/controller/ApplicantController.java) |
+| GET | `/api/applicants/{applicantId}` | 根據 ID 取得單一求職者資料 | [`getApplicantById()`](applicant-service/src/main/java/org/ats/applicantservice/controller/ApplicantController.java) |
+| GET | `/api/applicants?jobId={jobId}` | 根據職位 ID 取得該職位的所有求職者 | [`getApplicantsByJobId()`](applicant-service/src/main/java/org/ats/applicantservice/controller/ApplicantController.java) |
+| POST | `/api/applicants` | 新增求職者資料 | [`create()`](applicant-service/src/main/java/org/ats/applicantservice/controller/ApplicantController.java) |
+| DELETE | `/api/applicants/{applicantId}` | 刪除指定求職者 | [`delete()`](applicant-service/src/main/java/org/ats/applicantservice/controller/ApplicantController.java) |
+
+### Job Service - 職位管理
+**Base URL**: `/api/jobs`
+
+| HTTP Method | Endpoint | 功能描述 | Controller Method |
+|------------|----------|----------|-------------------|
+| GET | `/api/jobs` | 取得所有職位列表 | [`getAllJobs()`](job-service/src/main/java/org/ats/jobservice/controller/JobController.java) |
+| GET | `/api/jobs/{id}` | 根據 ID 取得單一職位資料 | [`getJobById()`](job-service/src/main/java/org/ats/jobservice/controller/JobController.java) |
+| POST | `/api/jobs` | 新增職位 | [`createJob()`](job-service/src/main/java/org/ats/jobservice/controller/JobController.java) |
+| DELETE | `/api/jobs/{id}` | 刪除指定職位 | [`deleteJob()`](job-service/src/main/java/org/ats/jobservice/controller/JobController.java) |
+
+### Interview Service - 面試管理
+#### 面試場次管理
+**Base URL**: `/api/interviewSessions`
+
+| HTTP Method | Endpoint | 功能描述 | Controller Method |
+|------------|----------|----------|-------------------|
+| GET | `/api/interviewSessions` | 取得所有面試場次 | [`getAllSessions()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewSessionController.java) |
+| GET | `/api/interviewSessions/{id}` | 根據 ID 取得指定面試場次 | [`getSessionById()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewSessionController.java) |
+| GET | `/api/interviewSessions/interviewer/{id}` | 取得指定面試官的面試場次 | [`getSessionsForInterviewer()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewSessionController.java) |
+| POST | `/api/interviewSessions` | 新增面試場次 | [`createSession()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewSessionController.java) |
+| POST | `/api/interviewSessions/schedule` | HR 排程面試 (三位面試官對一位應聘者) | [`scheduleSession()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewSessionController.java) |
+| DELETE | `/api/interviewSessions/{id}` | 刪除指定面試場次 | [`deleteSession()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewSessionController.java) |
+
+#### 面試回饋管理
+**Base URL**: `/api/feedbacks`
+
+| HTTP Method | Endpoint | 功能描述 | Controller Method |
+|------------|----------|----------|-------------------|
+| GET | `/api/feedbacks?candidateId={candidateId}&interviewerId={interviewerId}` | 取得面試官對應聘者的回饋 | [`getFeedbackByCandidateAndInterviewer()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewScoreController.java) |
+| POST | `/api/feedbacks` | 儲存面試回饋 | [`saveFeedback()`](interview-service/src/main/java/org/ats/interviewservice/controller/InterviewScoreController.java) |
+
+### Tracked Applicant Service - 求職者追蹤
+**Base URL**: `/api/trackedApplicants`
+
+| HTTP Method | Endpoint | 功能描述 | Controller Method |
+|------------|----------|----------|-------------------|
+| GET | `/api/trackedApplicants` | 取得所有追蹤記錄 | [`getAll()`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/TrackedApplicantController.java) |
+| GET | `/api/trackedApplicants?jobId={jobId}` | 根據職位 ID 取得該職位的追蹤記錄 | [`getByJobId()`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/TrackedApplicantController.java) |
+| POST | `/api/trackedApplicants?applicantId={applicantId}&jobId={jobId}` | 建立求職者推薦 (追蹤記錄) | [`recommend()`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/TrackedApplicantController.java) |
+| DELETE | `/api/trackedApplicants/{id}` | 刪除指定追蹤記錄 | [`delete()`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/TrackedApplicantController.java) |
+
+#### 主管操作管理
+**Base URL**: `/api/supervisor-actions`
+
+| HTTP Method | Endpoint | 功能描述 | Controller Method |
+|------------|----------|----------|-------------------|
+| POST | `/api/supervisor-actions` | 儲存主管操作記錄 | [`saveAction()`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/SupervisorActionController.java) |
+
+### Process Service - 流程管理
+**Base URL**: 尚未實作具體 Controller
+
+### Recruitment Service - 招聘管理  
+**Base URL**: 尚未實作具體 Controller
+
+## API 使用範例
+
+### 求職者推薦流程
+```bash
+# 1. 建立求職者推薦
+POST /api/trackedApplicants?applicantId=1&jobId=10
+
+# 2. 查詢該職位的所有追蹤記錄
+GET /api/trackedApplicants?jobId=10
+
+# 3. 安排面試
+POST /api/interviewSessions/schedule
+Content-Type: application/json
+{
+  "candidateId": 1,
+  "jobId": 10,
+  "interviewerIds": [1, 2, 3],
+  "scheduledTime": "2024-01-15T10:00:00"
+}
+```
+
+### 面試回饋流程
+```bash
+# 1. 面試官提交回饋
+POST /api/feedbacks
+Content-Type: application/json
+{
+  "candidateId": 1,
+  "interviewerId": 2,
+  "score": 85,
+  "comments": "表現良好，技術能力符合需求"
+}
+
+# 2. 查詢特定面試官對特定候選人的回饋
+GET /api/feedbacks?candidateId=1&interviewerId=2
+```
+
+### CORS 設定
+部分服務已設定 CORS 支援前端應用程式 (`http://localhost:4200`)：
+- [`tracked-applicant-service`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/SupervisorActionController.java) 的 SupervisorActionController
+- [`job-service`](job-service/src/main/java/org/ats/jobservice/config/WebConfig.java) 透過 WebConfig 全域設定
+
+// ...existing code...
 ## 快速開始
 
 ### 前置需求
