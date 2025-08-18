@@ -162,7 +162,16 @@
 | POST | `/api/supervisor-actions` | 儲存主管操作記錄 | [`saveAction()`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/SupervisorActionController.java) |
 
 ### Process Service - 流程管理
-**Base URL**: 尚未實作具體 Controller
+**Base URL**: `/api/processes`
+
+| HTTP Method | Endpoint | 功能描述 | Controller Method |
+|------------|----------|----------|-------------------|
+| GET | `/api/processes` | 取得全域預設流程步驟 | [`getDefaultSteps()`](process-service/src/main/java/org/ats/processservice/controller/ProcessStepController.java) |
+
+**實體結構**：
+- [`ProcessStep`](process-service/src/main/java/org/ats/processservice/entity/ProcessStep.java) - 包含步驟順序、標籤、可能結果
+- 支援步驟如：「初審」、「一面」、「二面」、「最終面試」
+- 支援結果如：「進行中」、「通過」
 
 ## API 使用範例
 
@@ -264,14 +273,76 @@ cd applicant-service
 - `recruitment_db` - 招聘資料
 - `tracked_applicant_db` - 追蹤資料
 
-## 貢獻指南
+## 開發進度與 To-Do
 
-歡迎提交 Issue 和 Pull Request 來改善這個專案。在貢獻代碼前，請確保：
+### 🚧 Process Service 實作狀況
+**目前完成項目**：
+- ✅ 基礎架構設立 (Spring Boot + JPA)
+- ✅ [`ProcessStep`](process-service/src/main/java/org/ats/processservice/entity/ProcessStep.java) 實體設計完成
+  - 支援步驟順序 (`stepOrder`)
+  - 支援步驟標籤 (`label`) - 如「初審」、「一面」
+  - 支援可能結果 (`possibleOutcomes`) - 如「進行中」、「通過」、「拒絕」
+- ✅ [`ProcessStepController`](process-service/src/main/java/org/ats/processservice/controller/ProcessStepController.java) 基本框架
+  - 提供 `GET /api/processes` 取得預設流程步驟
+- ✅ [`ProcessStepService`](process-service/src/main/java/org/ats/processservice/service/ProcessStepService.java) 基礎服務層
+- ✅ [`ProcessStepRepository`](process-service/src/main/java/org/ats/processservice/repository/ProcessStepRepository.java) 資料存取層
 
-1. 遵循現有的代碼風格
-2. 添加適當的測試用例
-3. 更新相關文檔
-4. 確保所有服務都能正常啟動
+**待完成項目**：
+- 🔲 個別求職者流程狀態追蹤實體 (`ApplicantProcessState`)
+- 🔲 流程狀態轉換邏輯 (狀態機模式)
+- 🔲 與其他服務的整合 API
+- 🔲 流程自動化觸發機制
+- 🔲 流程統計和報表功能
+
+### 📋 待開發功能 (To-Do List)
+
+#### 🔔 通知服務 (Notification Service)
+**新增服務建議**：
+- **Email 通知**：
+  - 面試邀請通知
+  - 流程狀態變更通知
+  - 面試結果通知
+- **系統內通知**：
+  - 即時通知 (WebSocket)
+  - 通知歷史記錄
+- **通知模板管理**：
+  - 可自訂的通知範本
+  - 多語言支援
+- **整合點**：
+  - Interview Service → 面試安排通知
+  - Process Service → 流程變更通知
+  - Tracked Applicant Service → 狀態更新通知
+
+#### 📅 面試時程總表功能
+**Interview Service 擴充**：
+- **時程總覽 API**：
+  ```
+  GET /api/interview-schedule/calendar?startDate=2024-01-01&endDate=2024-01-31
+  GET /api/interview-schedule/interviewer/{interviewerId}/calendar
+  GET /api/interview-schedule/job/{jobId}/calendar
+  ```
+- **資料整合**：
+  - 整合面試官行事曆
+  - 整合會議室預約狀況
+  - 整合求職者可面試時段
+- **前端功能**：
+  - 月曆檢視模式
+  - 週檢視模式
+  - 衝突提醒機制
+  - 批量排程功能
+
+#### 🎯 其他優化項目
+- **API Gateway**：統一服務入口和路由管理
+- **服務監控**：健康檢查和效能監控
+- **資料分析**：招聘效率分析和儀表板
+- **權限管理**：RBAC 角色權限控制
+- **檔案管理**：履歷和面試記錄檔案上傳
+
+### 🏗️ 架構改進建議
+- **消息佇列**：使用 RabbitMQ 或 Kafka 實現非同步通訊
+- **快取層**：Redis 快取常用資料
+- **配置中心**：Spring Cloud Config 集中配置管理
+- **服務註冊與發現**：Eureka 或 Consul
 
 ## 授權
 
