@@ -170,8 +170,8 @@
 
 **實體結構**：
 - [`ProcessStep`](process-service/src/main/java/org/ats/processservice/entity/ProcessStep.java) - 包含步驟順序、標籤、可能結果
-- 支援步驟如：「初審」、「一面」、「二面」、「最終面試」
-- 支援結果如：「進行中」、「通過」
+- 支援招募步驟如：「初審」、「一面」、「二面」、「最終面試」、「核薪」、「入職」
+- 支援該步驟結果如：「進行中」、「通過」、「拒絕」
 
 ## API 使用範例
 
