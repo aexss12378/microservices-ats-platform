@@ -100,8 +100,6 @@
 - **雲端資料庫**: 使用 Cloud SQL Proxy 連接 Google Cloud SQL
 - **自動化 CI/CD**: 透過 [`build-and-push.sh`](build-and-push.sh) 實現自動化部署
 
-// ...existing code...
-
 ## API 端點總覽
 
 ### Applicant Service - 求職者管理
@@ -211,7 +209,7 @@ GET /api/feedbacks?candidateId=1&interviewerId=2
 - [`tracked-applicant-service`](tracked-applicant-service/src/main/java/org/ats/trackedapplicantservice/controller/SupervisorActionController.java) 的 SupervisorActionController
 - [`job-service`](job-service/src/main/java/org/ats/jobservice/config/WebConfig.java) 透過 WebConfig 全域設定
 
-// ...existing code...
+
 ## 快速開始
 
 ### 前置需求
