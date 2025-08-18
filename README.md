@@ -164,9 +164,6 @@
 ### Process Service - 流程管理
 **Base URL**: 尚未實作具體 Controller
 
-### Recruitment Service - 招聘管理  
-**Base URL**: 尚未實作具體 Controller
-
 ## API 使用範例
 
 ### 求職者推薦流程
